@@ -27,9 +27,9 @@ DEBUG = True
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = ['127.0.0.1','localhost','localhost:8000','https://federicolumm-8000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/']
 
-
+CSRF_TRUSTED_ORIGINS =  ['https://federicolumm-8000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/']
 # Application definition
 
 INSTALLED_APPS = [
@@ -53,6 +53,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'djangobackend.urls'
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+)
 
 TEMPLATES = [
     {
@@ -118,10 +122,15 @@ USE_L10N = True
 USE_TZ = True
 
 
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media')
+if DEBUG == True:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% load static %}
+
     <title>Dealership Review</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -10,16 +12,109 @@
     <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
     <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
-
 </head>
 
-    <body>
-    <!-- Remove this line the first time you edit this file -->
-     This is the index page of your Django app!
-    <!--Add a nav bar here -->
+<body>
+    {% if user.is_authenticated %}
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Dealership Reviews</a>
+            <div class="row">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" style="color:green">Welcome {{ user.first_name}} {{ user.last_name}} !</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" style="background : #68abdb; color:#FFFFFF; border-radius :50px;"
+                            aria-current="page" href="{% url 'djangoapp:index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'djangoapp:about' %}">About us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'djangoapp:logout' %}" style="color:red">Sign out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% else %}
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Dealership Reviews</a>
+            <div class="row">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link active" style="background : #68abdb; color:#FFFFFF; border-radius :50px;"
+                            aria-current="page" href="{% url 'djangoapp:index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'djangoapp:about' %}">About us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact us</a>
+                    </li>
+                </ul>
+                <form action = "{% url 'djangoapp:login' %}" method = "POST" class="d-flex">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col">
+                            <input name = "username" class="form-control me-2" type="text" placeholder="Username" aria-label="Username"
+                                style="margin-left:20px" required>
+                        </div>
+                        <div class="col">
+                            <input name = "password" class="form-control me-2" type="password" placeholder="Password"
+                                aria-label="Password" required>
+                        </div>
+                        <div>
+                            <input class="btn btn-outline-primary" value = "Login" type="submit">
+                            <a href="{% url 'djangoapp:registration' %}" class="link-primary">Sign up</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
 
-    <!--Add a dealer table here -->
 
-    </body>
+    <div class="container-fluid"><br><br>
+        <table class="table" id="table" data-filter-control="true">
+            <thead>
+                <tr>
+                    <th data-field="id">ID</th>
+                    <th data-field="name">Dealer Name</th>
+                    <th data-field="city">City</th>
+                    <th data-field="address">Address</th>
+                    <th data-field="zip" data-filter-control="select">Zip</th>
+                    <th data-field="state" data-filter-control="select">State</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dealer in dealership_list %}
+                    <tr>
+                        <td>{{dealer.id}}</td>
+                        <td><a href="{% url 'djangoapp:dealer_details' dealer.id dealer.full_name%}">{{dealer.full_name}}</a></td>
+                        <td>{{dealer.city}}</td>
+                        <td>{{dealer.address}}</td>
+                        <td>{{dealer.zip}}</td>
+                        <td>{{dealer.st}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</body>
+<script>
+    $(function() {
+      $('#table').bootstrapTable()
+    })
+</script>
 
 </html>

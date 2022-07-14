@@ -1,16 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     {% load static %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <title>Dealership Review</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
-
 </head>
-    <body>
-    <!--Add review form here -->
-    </body>
+
+<body>
+    {% if user.is_authenticated %}
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Dealership Reviews</a>
+            <div class="row">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" style="color:green">Welcome {{ user.first_name}} {{ user.last_name}} !</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" style="background : #68abdb; color:#FFFFFF; border-radius :50px;"
+                            aria-current="page" href="{% url 'djangoapp:index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'djangoapp:about' %}">About us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'djangoapp:logout' %}" style="color:red">Sign out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% else %}
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Dealership Reviews</a>
+            <div class="row">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link active" style="background : #68abdb; color:#FFFFFF; border-radius :50px;"
+                            aria-current="page" href="{% url 'djangoapp:index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'djangoapp:about' %}">About us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact us</a>
+                    </li>
+                </ul>
+                <form action = "{% url 'djangoapp:login' %}" method = "POST" class="d-flex">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col">
+                            <input name = "username" class="form-control me-2" type="text" placeholder="Username" aria-label="Username"
+                                style="margin-left:20px" required>
+                        </div>
+                        <div class="col">
+                            <input name = "password" class="form-control me-2" type="password" placeholder="Password"
+                                aria-label="Password" required>
+                        </div>
+                        <div>
+                            <input class="btn btn-outline-primary" value = "Login" type="submit">
+                            <a href="{% url 'djangoapp:registration' %}" class="link-primary">Sign up</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    <form action="{% url 'djangoapp:add_review' dealer_id dealer%}" method="post">
+        {% csrf_token %}
+        <div class="container">
+            <p></p>
+            <div class="form-group">
+                <h2>Add a review about <strong>{{ dealer }}</strong></h2>
+                <p></p>
+                <h6 class="text-dark"><strong>Enter de review content</strong></h6>
+                <textarea class="form-control" id="content" name="content" rows="3" required placeholder="Please give us a feedback for {{ dealer }}"></textarea>
+                <p></p>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck">
+                <label class="form-check-label text-dark" for="purchasecheck">Has purchased the car from {{ dealer }}?</label>
+                <label class="form-check-label" for="purchasecheck">(select purchased car information below if checked)</label>
+                <p></p>
+            </div>
+
+            <div class="form-group">
+                <h6 class="text-dark"><strong>Select your car (model-make-year)</strong></h6>
+                <select name="car" id="car" class="form-select" required>
+                    {% for car in cars %}
+                        <option selected value={{car.id}}>{{car.name}}-{{car.make}}-{{ car.year }}</option>
+                    {% endfor %}
+                </select>
+                <p></p>
+            </div>
+
+            <div class="form-group">
+                <h6 class="text-dark"><strong>Select your Purchased Date</strong></h6>
+                <p></p>
+                <input class="date-own form-control" type="text" name="purchasedate" id="purchasedate" required>
+                <p></p>
+            </div>
+            <button class="btn btn-primary me-3" type="submit">Submit</button> <!--Style button with .btn and .btn-primary class -->
+        </div>
+    </form>
+
+</body>
+<script type="text/javascript">
+    $('.date-own').datepicker({
+       format: 'mm/dd/yyyy'
+     });
+</script>
+
 </html>

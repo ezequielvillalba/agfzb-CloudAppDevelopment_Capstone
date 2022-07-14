@@ -1,11 +1,11 @@
   applications:
-  - name: djangoapp
+  - name: app
     routes:
-      - route: $HOST.$DOMAIN
+      - route: fexdelucardealership.mybluemix.net
     memory: 128M
     buildpack: python_buildpack
-  - name: djangoapp-nginx
+  - name: app-nginx
     routes:
-      - route: $HOST.$DOMAIN/static
+      - route: fexdelucardealership.mybluemix.net
     memory: 128M
     buildpack: staticfile_buildpack

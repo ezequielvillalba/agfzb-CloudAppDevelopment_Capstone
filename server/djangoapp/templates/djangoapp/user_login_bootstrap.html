@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        {% load static %}
+    
+        <title>Dealership Review</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+        <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+    </head>
+
+    <body>
+        {% if user.is_authenticated %}
+        <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Dealership Reviews</a>
+                <div class="row">
+                    <ul class="nav justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" style="color:green">Welcome {{ user.first_name}} {{ user.last_name}} !</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" style="background : #68abdb; color:#FFFFFF; border-radius :50px;"
+                                aria-current="page" href="{% url 'djangoapp:index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'djangoapp:about' %}">About us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'djangoapp:logout' %}" style="color:red">Sign out</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {% else %}
+        <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Dealership Reviews</a>
+                <div class="row">
+                    <ul class="nav justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link active" style="background : #68abdb; color:#FFFFFF; border-radius :50px;"
+                                aria-current="page" href="{% url 'djangoapp:index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'djangoapp:about' %}">About us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact us</a>
+                        </li>
+                    </ul>
+                    <form action = "{% url 'djangoapp:login' %}" method = "POST" class="d-flex">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col">
+                                <input name = "username" class="form-control me-2" type="text" placeholder="Username" aria-label="Username"
+                                    style="margin-left:20px" required>
+                            </div>
+                            <div class="col">
+                                <input name = "password" class="form-control me-2" type="password" placeholder="Password"
+                                    aria-label="Password" required>
+                            </div>
+                            <div>
+                                <input class="btn btn-outline-primary" value = "Login" type="submit">
+                                <a href="{% url 'djangoapp:registration' %}" class="link-primary">Sign up</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </nav>
+        {% endif %}
+
+            <!-- Stylize Login form -->
+        <form action="{% url 'djangoapp:login' %}" method="post">
+            {% csrf_token %}
+            <div class="container"> <!--Style root div with .container class -->
+                <h1>Login</h1>
+                <div class="form-group"> <!--Style second div with .form-group class -->
+                <label for="username"><b>User Name</b></label>
+                <input id="username" class = "form-control" type="text" placeholder="Enter User Name: " name="username" required> <!--Style input with .form-control class -->
+                <label for="psw"><b>Password</b></label>
+                <input id="psw" class = "form-control" type="password"  placeholder="Enter Password: " name="psw" required> <!--Style input with .form-control class -->
+                </div>
+                {% if message %}
+                <div class="alert alert-warning"> <!--Style the message paragraph with .alert and .alert-warning class -->
+                    {{ message }}
+                </div>
+                {% endif %}
+                <button class="btn btn-primary" type="submit">Login</button> <!--Style button with .btn and .btn-primary class -->
+            </div>
+        </form>
+    </body>
+</html>
