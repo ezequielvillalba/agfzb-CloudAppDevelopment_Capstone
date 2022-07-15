@@ -107,20 +107,34 @@ def get_dealer_reviews_from_cf(url, **kwargs):
 # https://cloud.ibm.com/apidocs/natural-language-understanding?utm_medium=Exinfluencer&utm_source=Exinfluencer&utm_content=000026UJ&utm_term=10006555&utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2022-01-01#analyzeget
 def analyze_review_sentiments(text, nlu_api_key, nlu_url):
     sentiment_temp = "neutral"
-
-    # Authentication via IAM
+    
     authenticator = IAMAuthenticator(nlu_api_key)
-    service = NaturalLanguageUnderstandingV1(
-        version='2018-03-16',
-        authenticator=authenticator)
+    service = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator)
     service.set_service_url(nlu_url)
-
+    
     try:
-        response = service.analyze(text=text, 
-                        features=Features(sentiment=SentimentOptions()),
-                        language="en").get_result()
+        response = service.analyze( text=text,features=Features(sentiment=SentimentOptions(targets=[text]))).get_result()
         print(json.dumps(response, indent=2))
         return response['sentiment']['document']['label']
     except Exception as e:
         print(str(e))
         return sentiment_temp
+
+    # sentiment_temp = "neutral"
+
+    # # Authentication via IAM
+    # authenticator = IAMAuthenticator(nlu_api_key)
+    # service = NaturalLanguageUnderstandingV1(
+    #     version='2018-03-16',
+    #     authenticator=authenticator)
+    # service.set_service_url(nlu_url)
+
+    # try:
+    #     response = service.analyze(text=text, 
+    #                     features=Features(sentiment=SentimentOptions()),
+    #                     language="en").get_result()
+    #     print(json.dumps(response, indent=2))
+    #     return response['sentiment']['document']['label']
+    # except Exception as e:
+    #     print(str(e))
+    #     return sentiment_temp
