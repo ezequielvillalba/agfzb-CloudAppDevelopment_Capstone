@@ -27,7 +27,7 @@ DEBUG = True
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','localhost:8000','https://federicolumm-8000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','localhost:8000','https://federicolumm-8000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/','fexdelucardealerships.mybluemix.net']
 
 CSRF_TRUSTED_ORIGINS =  ['https://federicolumm-8000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/']
 # Application definition

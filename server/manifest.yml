@@ -1,11 +1,11 @@
   applications:
   - name: app
     routes:
-      - route: fexdelucardealership.mybluemix.net
+      - route: fexdelucardealerships.mybluemix.net
     memory: 128M
     buildpack: python_buildpack
   - name: app-nginx
     routes:
-      - route: fexdelucardealership.mybluemix.net
+      - route: fexdelucardealerships.mybluemix.net
     memory: 128M
     buildpack: staticfile_buildpack
