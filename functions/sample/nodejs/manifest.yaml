@@ -1,0 +1,27 @@
+packages:
+  # this is the package name
+  dealership-package:
+    version: 1.0
+    license: Apache-2.0
+    inputs:
+      CLOUDANT_URL:
+        type: string
+        value: "https://c1814c9d-49ff-488e-8be9-21eaa9214c7c-bluemix.cloudantnosqldb.appdomain.cloud"
+      CLOUDANT_APIKEY:
+        type: string
+        value: "IukMHXbwqVIr_OEbs5xGIiXBiTYwdg2lVOodqpjzVLHn"
+    actions:
+      get-details:
+        # source for the action; in this case it is a folder
+        function: details
+        runtime: nodejs:16
+        # publish the action as a web action
+        web: yes
+    apis:
+      dealership-api:
+        api:
+          get-details:
+            get-details:
+              method: POST
+
+
