@@ -27,9 +27,23 @@ DEBUG = True
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','localhost:8000','https://federicolumm-8000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/','fexdelucardealerships.mybluemix.net']
+ALLOWED_HOSTS = [   '127.0.0.1',
+                    'localhost',
+                    'localhost:8000',
+                    'fexdelucardealerships.mybluemix.net',
+                    'https://federicolumm-8000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/',
+                    'https://federicolumm-8000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/',
+                    'https://federicolumm-8000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/',
+                    'https://federicolumm-8000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/',
+                    'https://federicolumm-8000.theiadocker-4-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/',
+                    ]
 
-CSRF_TRUSTED_ORIGINS =  ['https://federicolumm-8000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/']
+CSRF_TRUSTED_ORIGINS =  [   'https://federicolumm-8000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai',
+                            'https://federicolumm-8000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai',
+                            'https://federicolumm-8000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai',
+                            'https://federicolumm-8000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai',
+                            'https://federicolumm-8000.theiadocker-4-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai',
+                            ]
 # Application definition
 
 INSTALLED_APPS = [
