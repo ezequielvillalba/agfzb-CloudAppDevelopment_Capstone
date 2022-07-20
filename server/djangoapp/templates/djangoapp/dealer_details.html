@@ -95,11 +95,11 @@
             {% for review in review_list %}
             <div class="card">
                 {% if review.sentiment == "positive" %}
-                <img class="card-img-left" src="{% static 'media/emoji/positive.png' %}" height="30" style="margin-top: 0px">
+                <img class="card-img-left" src="{{ MEDIA_URL }}emoji/positive.png" height="30" style="margin-top: 0px">
                 {% elif review.sentiment == "neutral" %}
-                <img class="card-img-left" src="{% static 'media/emoji/neutral.png' %}" height="30" style="margin-top: 0px">
+                <img class="card-img-left" src="{{ MEDIA_URL }}emoji/neutral.png" height="30" style="margin-top: 0px">
                 {% else %}
-                <img class="card-img-left" src="{% static 'media/emoji/negative.png' %}" height="30" style="margin-top: 0px">
+                <img class="card-img-left" src="{{ MEDIA_URL }}emoji/negative.png" height="30" style="margin-top: 0px">
                 {% endif %}
 
                 <div class="card-body">
