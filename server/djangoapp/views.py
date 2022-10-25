@@ -89,14 +89,56 @@ def registration_request(request):
 def get_dealerships(request):
     context = {}
     if request.method == "GET":
+        url = "https://7c74ce76.eu-gb.apigw.appdomain.cloud/api/dealership"
+        dealerships = get_dealers_from_cf(url)
+        context["dealership_list"] = dealerships
         return render(request, 'djangoapp/index.html', context)
-
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
 # def get_dealer_details(request, dealer_id):
 # ...
+def get_dealer_details(request, dealerId, dealerFullName):
+    context = {}
+    if request.method == 'GET':
+        url = "https://7c74ce76.eu-gb.apigw.appdomain.cloud/api/review"
+        reviews = get_dealer_reviews_from_cf(url, dealerId)
+        context["reviews"] = reviews
+        context["dealerId"] = dealerId
+        context["dealerFullName"] = dealerFullName
+        return render(request, 'djangoapp/dealer_details.html', context)
+
 
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
-# ...
-
+# # ...
+def add_review(request, dealerId):
+    context = {
+        "dealerId": dealerId
+    }
+    get_url = url = "https://7c74ce76.eu-gb.apigw.appdomain.cloud/api/dealership"
+    car_dealer = get_dealers_from_cf(get_url, dealerId=dealerId)
+    if request.method == 'POST':
+        post_url = "https://7c74ce76.eu-gb.apigw.appdomain.cloud/api/review"
+        form_data = request.POST
+        car = CarModel.objects.get(id=form_data.get('car'))
+        payload = {
+            "review": {
+                'id': 2022,
+                'review': form_data.get('review_text'),
+                'car_make': car.car_make.name,
+                'car_year': int(car.year.strftime("%Y")),
+                'car_model': car.name,
+                'purchase': True if form_data.get('purchase') == 'on' else False,
+                'purchase_date': form_data.get('purchase_date'),
+                'name': form_data.get('name'),
+                'dealership': dealerId,
+                'sentiment': analyze_review_sentiments( "nautral" if form_data.get('review_text') == "" else "positive" if form_data.get('purchase') == 'on' else "negative" )
+            }
+        }
+        response = post_request(post_url, payload)
+        print("With url {}, \nresponse => {}".format(post_url, response))
+        return redirect('djangoapp:dealer_details', dealerId=dealerId, dealerFullName=car_dealer[0].full_name)
+    elif request.method == 'GET':
+        context['cars'] = CarModel.objects.all()
+        context['dealership'] = car_dealer[0]
+        return render(request, 'djangoapp/add_review.html', context)
