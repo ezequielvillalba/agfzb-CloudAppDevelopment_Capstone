@@ -132,8 +132,8 @@ def get_dealer_reviews_from_cf(url, dealerId):
 
 
 def analyze_review_sentiments(text):
-    api_key = "1hnLNpdx4BN_8iTZy12k070Cg1F2K3kRP3J03xK-PkZF"
-    url = "https://api.eu-de.natural-language-understanding.watson.cloud.ibm.com/instances/a42ffb57-4e37-405b-9e0d-449398fe1302"
+    api_key = "Tis_kkoet1gdM43W9j8hFT6IUe22ymwtFCx3LJFVy4Cw"
+    url = "https://322d2895-8806-458a-992a-18f2fb8cd10a-bluemix.cloudantnosqldb.appdomain.cloud"
     texttoanalyze = text
     version = '2020-08-01'
     authenticator = IAMAuthenticator(api_key)
