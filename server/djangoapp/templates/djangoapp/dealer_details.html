@@ -51,44 +51,43 @@
     </nav>
         
     <!-- Add reviews as cards -->
-    <div class="container mx-auto my-2 ">
+    <div class="container">
+        <h2>Reviews for <strong> {{dealer}} </strong></h2>
+        <p></p>
 
-        <h1 class="my-3"><small>Reviews for dealer #{{ dealer}} <br></small> 
-            {% for dealerdetails in dealerships %}
-                {% if dealerdetails.id == dealer %}
-                    {{dealerdetails.full_name}}
-                {% endif %}
-            {% endfor %}
-        </h1>
+        {% if user.is_authenticated %}
+        <a class="btn btn-primary me-3" href="{% url 'djangoapp:add_review' dealer.id %}">Add Review</a>
+        <p></p>
+        {% endif %}
+
+        {% if reviews %}
         <div class="card-columns">
-            {% for review in dealer_reviews %}
-            <div class="card">
-                <img class="card-img-left m-2" width="30" height="30" src="{{MEDIA_URL}}/emoji/{{ review.sentiment }}.png">
-    
-                <div class="card-body">
-                    <h4 class="card-title">
-                       Bought Car: {{ review.car_model }}, {{ review.car_make }}
-                    </h4>
-                    <h4 class="text">
-                       Model Year:  {{ review.car_year }}
-                    </h4>
-                    <div class="card-text">
-                        <p>Review: {{ review.review }}</p>
+            {% for review in reviews %}
+                <div class="card">
+                    {% if review.sentiment == "positive" %}
+                        <img class="card-img-left" src="{{MEDIA_URL}}/emoji/positive.png" height="30" style="margin-top: 0px">
+                    {% elif review.sentiment == "negative" %}
+                        <img class="card-img-left" src="{{MEDIA_URL}}/emoji/negative.png" height="30" style="margin-top: 0px">
+                    {% else %}
+                        <img class="card-img-left" src="{{MEDIA_URL}}/emoji/neutral.png" height="30" style="margin-top: 0px">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{review.car_make}}-{{review.car_model}}-{{review.car_year}}</h5>
+                        <h5 class="card-title">{{review.purchase_date}}</h5>
+                        <p class="card-text">{{review.review}}</p>
                     </div>
                 </div>
-            </div>
-            {% empty  %}
-            <div class="card">
-                <div class = "card-body">
-                    <div class = "text">
-                        No reviews available yet.<br>
-                        Please leave a review with <a href="{% url 'djangoapp:add_review' dealer %}">this form</a>
-                    </div>
-                </div>
-            </div>
             {% endfor %}
         </div>
     </div>
+{% else %}
+<div class="card-columns-vertical" style="width: 18rem;">
+    <div class="card mt-1 text-center">
+        <div class="card-header"><h5>No Reviews Yet</h5></div>
+         
+    </div>
+</div>
+{% endif %}
     
     </body>
 
