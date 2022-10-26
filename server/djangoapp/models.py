@@ -12,15 +12,15 @@ import json
 # - Description
 # - Any other fields you would like to include in car make model
 # - __str__ method to print a car make object
+# Car Make model:
 
 class CarMake(models.Model):
-    maker_name = models.CharField(null=False, max_length=30, default='BMW')
-    description = models.CharField(null=False, max_length=500)
-    #dob = models.DateField(null=True)
-    
-    # Create a toString method for object string representation
+    name = models.CharField(null=False, max_length=30, default='car make')
+    description = models.CharField(max_length=1000)
+
     def __str__(self):
-        return "Name: " + self.maker_name
+        return "Name: " + self.name + "," + \
+               "Description: " + self.description
 
 # <HINT> Create a Car Model model `class CarModel(models.Model):`:
 # - Many-To-One relationship to Car Make model (One Car Make has many Car Models, using ForeignKey field)
@@ -30,27 +30,26 @@ class CarMake(models.Model):
 # - Year (DateField)
 # - Any other fields you would like to include in car model
 # - __str__ method to print a car make object
+# Car Model model:
 class CarModel(models.Model):
-    
-    SUV = 'SUV'
     SEDAN = 'Sedan'
-    WAGON = 'Wagon'
-    COUPE = 'Coupe'
-    TYPE_CHOICES = [
-        (SUV, 'SUV'),
+    SUV = 'SUV'
+    WAGON = 'WAGON'
+    SPORTS_CAR = 'Sports car'
+    CAR_MODEL_TYPES = [
         (SEDAN, 'Sedan'),
-        (WAGON, 'Wagon'),
-        (COUPE, 'Coupe')]
-    
-    model_name = models.CharField(null=False, max_length=30, default='X7')
-    dealerID = models.IntegerField(default=1,primary_key=True)
-    car_type = models.CharField(null=False,max_length=30, choices=TYPE_CHOICES, default=SEDAN)
-    year = models.DateField(null=True)
-    make = models.ForeignKey(CarMake, on_delete=models.CASCADE)
+        (SUV, 'SUV'),
+        (WAGON, 'WAGON'),
+        (SPORTS_CAR, 'Sports car')
+    ]
 
+    CarMake = models.ForeignKey(CarMake, on_delete=models.CASCADE)
+    name = models.CharField(null=False, max_length=30, default='car model')
+    id =  models.IntegerField(default=0, primary_key=True)
+    car_model = models.CharField(max_length=10, choices=CAR_MODEL_TYPES, default=SEDAN)
+    car_year = models.DateField(default=now)
     
-    # Create a toString method for object string representation
-def __str__(self):
+    def __str__(self):
         return "Name: " + self.name + "," + \
                "Model: " + self.car_model
 
