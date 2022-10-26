@@ -50,8 +50,9 @@ class CarModel(models.Model):
 
     
     # Create a toString method for object string representation
-    def __str__(self):
-        return "Name: " + self.model_name
+def __str__(self):
+        return "Name: " + self.name + "," + \
+               "Model: " + self.car_model
 
 # <HINT> Create a plain Python class `CarDealer` to hold dealer data
 class CarDealer:
@@ -81,28 +82,16 @@ class CarDealer:
 
 # <HINT> Create a plain Python class `DealerReview` to hold review data
 class DealerReview:
-
-    def __init__(self, dealership, name, purchase, id, review, purchase_date, car_make, car_model, car_year, sentiment):
-        # Review dealership
+    def __init__(self, dealership, name, purchase, review):
         self.dealership = dealership
-        # review name
         self.name = name
-        # customer purchase
         self.purchase = purchase
-        # review id
-        self.id = id
-        # review
         self.review = review
-        # purchase date reviewer
-        self.purchase_date = purchase_date
-        # review car maker
-        self.car_make = car_make
-        # review car model
-        self.car_model = car_model
-        # review car year
-        self.car_year = car_year
-        # review sentiment
-        self.sentiment = sentiment
-
+        self.purchase_date = ""
+        self.car_make = ""
+        self.car_model = ""
+        self.car_year = ""
+        self.sentiment = ""
+        self.id = ""
     def __str__(self):
-        return "Review: " + self.review
+        return "Dealer Review: " + self.review +"("+ self.sentiment+ ")"
