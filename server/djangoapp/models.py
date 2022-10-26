@@ -1,12 +1,19 @@
-from django.db import models
-from django.utils.timezone import now
-from django.contrib import admin
-from django.core import serializers 
-import uuid
-import json
+# from django.db import models
+# from django.utils.timezone import now
+# from django.contrib import admin
+# from django.core import serializers 
+# import uuid
+# import json
 # Create your models here.
 
-
+import sys
+from django.utils.timezone import now
+try:
+    from django.db import models
+except Exception:
+    print("There was an error loading django modules. Do you have django installed?")
+    sys.exit()
+import datetime
 # <HINT> Create a Car Make model `class CarMake(models.Model)`:
 # - Name
 # - Description
