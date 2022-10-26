@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dealership Review</title>
     {% load static %}
+    <title>Dealership Review</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -13,127 +13,84 @@
     <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
 </head>
 
-<body>
+    <body>
     <!--Add a nav bar here -->
-        <nav class="navbar navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Best Car Dealership</a>
+            <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Best Cars</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'djangoapp:about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+                    </li>
+                </ul>
             </div>
-            <ul class="nav navbar-nav navbar-left">    
-                  <li>
-                      <a class="btn btn-link" href="{% url 'djangoapp:about' %}">About Us</a>
-                      <a class="btn btn-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
-                  </li>
-            </ul>
             <ul class="nav navbar-nav navbar-right">
-            {% if user.is_authenticated %}
-            <li>
-                <a href="{% url 'djangoapp:add_review' dealerId %}">Add Review</a>
-                <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
-                <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
-            </li>
-            {% else %}
-            <li>
-                <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
-                    {% csrf_token %}
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Username" name="username" >
-                        <input type="password" class="form-control" placeholder="Password" name="psw" >
-                        <button class="btn btn-primary" type="submit">Login</button>
-                        <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
-                    </div>
-                </form>
-            </li>
-            {% endif %}
+                {% if user.is_authenticated %}
+                <li>
+                    <a class="btn btn-link" href="#">({{ user.username }})</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:add_review' dealer %}">Add Review</a>
+                </li>
+                {% else %}
+                <li>
+                    <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Username" name="username" >
+                            <input type="password" class="form-control" placeholder="Password" name="psw" >
+                            <button class="btn btn-primary" type="submit">Login</button>
+                            <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                        </div>
+                    </form>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
+    <!-- Add reviews as cards -->
+    <div class="container mx-auto my-2 ">
 
-   <!-- Add reviews as cards -->
-        <section class="bg-light text-center mb-3">
-            </br>
-            {% if reviews %}
-            <div class="card-columns mx-5 my-2">
-                {% for review in reviews %}
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">{{ review.name }}</h5>
-                            {% if review.purchase %}
-                                <h6 class="card-title">Purchased a {{ review.car_make }} {{ review.car_model }}</h6>
-                            {% else %}
-                                <h6 class="card-title">No Purchase Record</h6>
-                            {% endif %}
-                        </div>
-                        <div class="card-body">
-                            {% if review.sentiment == "positive" %}
-                            <img class="card-img-left" width="30" height="30"  src="{{ MEDIA_URL }}/emoji/positive.png" alt="sentiment-emoji">
-                            {% elif review.sentiment == "negative" %}
-                                <img class="card-img-left" width="30" height="30"  src="{{ MEDIA_URL }}/emoji/negative.png" alt="sentiment-emoji">
-                            {% else %}
-                                <img class="card-img-left" width="30" height="30"  src="{{ MEDIA_URL }}/emoji/neutral.png" alt="sentiment-emoji">
-                            {% endif %}
-                            <div class="card-text">Customer Remarks: {% if review.review == "" %}-{% else %} {{ review.review }} {% endif %} </div>
-                        </div>
-                        <div class="card-footer text-muted small bg-transparent p-1 pl-3">
-                            Purchase: {% if review.purchase %}Yes{% else %} No {% endif %}<br />
-                            Purchase Date: {{review.purchase_date}}
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-            {% else %}
-                <h6 class="card-title">There is no record of review about {{dealerFullName}}.</h6>
-            {% endif %}
-            </br>
-        </section>
-
-    <!-- footer -->
-    <footer class="footer ">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-lg-4 mb-4 mb-md-0">
-                    <h2 class="footer-heading">Best Car Dealership</h2>
-                    <p>A national car dealership with local branches spread across the United States recently conducted a market survey. One of the suggestions that emerged from the survey was that customers would find it beneficial if they could access a central database of dealership reviews across the country.</p>
-                    <ul class="list-unstyled float-md-left float-lft mt-4">
-                        <a href="#"><span class="fa fa-twitter"></span></a>
-                        <a href="#"><span class="fa fa-facebook"></span></a>
-                        <a href="#"><span class="fa fa-instagram"></span></a>
-                    </ul>
-                </div>
-                <div class="col-md-6 col-lg-4 pl-lg-5 mb-4 mb-md-0">
-                    <h2 class="footer-heading">Quick Links</h2>
-                    <ul class="list-unstyled">
-                        <li><a href="{% url 'djangoapp:index' %}">Home</a></li>
-                        <li><a href="{% url 'djangoapp:about' %}">About Us</a></li>
-                        <li><a href="{% url 'djangoapp:contact' %}">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-6 col-lg-4 mb-4 mb-md-0">
-                    <h2 class="footer-heading">Have a Questions?</h2>
-                    <div class="block-23 mb-3">
-                        <ul>
-                            <li><span class="icon fa fa-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-                            <li><a href="#"><span class="icon fa fa-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-                            <li><a href="#"><span class="icon fa fa-paper-plane"></span><span class="text">info@yourdomain.com</span></a></li>
-                        </ul>
+        <h1 class="my-3"><small>Reviews for dealer #{{ dealer}} <br></small> 
+            {% for dealerdetails in dealerships %}
+                {% if dealerdetails.id == dealer %}
+                    {{dealerdetails.full_name}}
+                {% endif %}
+            {% endfor %}
+        </h1>
+        <div class="card-columns">
+            {% for review in dealer_reviews %}
+            <div class="card">
+                <img class="card-img-left m-2" width="30" height="30" src="{{MEDIA_URL}}/emoji/{{ review.sentiment }}.png">
+    
+                <div class="card-body">
+                    <h4 class="card-title">
+                       Bought Car: {{ review.car_model }}, {{ review.car_make }}
+                    </h4>
+                    <h4 class="text">
+                       Model Year:  {{ review.car_year }}
+                    </h4>
+                    <div class="card-text">
+                        <p>Review: {{ review.review }}</p>
                     </div>
                 </div>
             </div>
-            <div class="row mt-5">
-                <div class="col-md-12 text-center">
-
-                    <p class="copyright"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://bestcardealership.com" target="_blank">bestcardealership.com</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+            {% empty  %}
+            <div class="card">
+                <div class = "card-body">
+                    <div class = "text">
+                        No reviews available yet.<br>
+                        Please leave a review with <a href="{% url 'djangoapp:add_review' dealer %}">this form</a>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-    </footer>
-</body> 
-    <script type="text/javascript">
-        $('.date-own').datepicker({
-            format: 'mm/dd/yyyy'
-        });
-    </script>
+    </div>
+    
+    </body>
+
 </html>
