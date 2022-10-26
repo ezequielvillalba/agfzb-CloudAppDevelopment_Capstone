@@ -98,20 +98,17 @@ def get_dealerships(request):
         dealerships = get_dealers_from_cf(url)
         context["dealership_list"] = dealerships
         return render(request, 'djangoapp/index.html', context)
+    
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
-def get_dealer_details(request, id):
-    if request.method == "GET":
-        context = {}
-        dealer_url ="https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
-        dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
-        context["dealer"] = dealer
-
-        review_url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-review"
-        reviews = get_dealer_reviews_from_cf(review_url, id=id)
-        print(reviews)
+def get_dealer_details(request, dealerId, dealerFullName):
+    context = {}
+    if request.method == 'GET':
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-review"
+        reviews = get_dealer_reviews_from_cf(url, dealerId)
         context["reviews"] = reviews
-
+        context["dealerId"] = dealerId
+        context["dealerFullName"] = dealerFullName
         return render(request, 'djangoapp/dealer_details.html', context)
 
 
