@@ -94,7 +94,7 @@ def registration_request(request):
 def get_dealerships(request):
     if request.method == "GET":
         context = {}
-        url = "https://7c74ce76.eu-gb.apigw.appdomain.cloud/api/dealership"
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
         dealerships = get_dealers_from_cf(url)
         context["dealership_list"] = dealerships
         return render(request, 'djangoapp/index.html', context)
@@ -104,7 +104,7 @@ def get_dealerships(request):
 def get_dealer_details(request, dealerId, dealerFullName):
     context = {}
     if request.method == 'GET':
-        url = "https://7c74ce76.eu-gb.apigw.appdomain.cloud/api/review"
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-review"
         reviews = get_dealer_reviews_from_cf(url, dealerId)
         context["reviews"] = reviews
         context["dealerId"] = dealerId
@@ -119,10 +119,10 @@ def add_review(request, dealerId):
     context = {
         "dealerId": dealerId
     }
-    get_url = url = "https://7c74ce76.eu-gb.apigw.appdomain.cloud/api/dealership"
+    get_url = url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
     car_dealer = get_dealers_from_cf(get_url, dealerId=dealerId)
     if request.method == 'POST':
-        post_url = "https://7c74ce76.eu-gb.apigw.appdomain.cloud/api/review"
+        post_url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/post-review"
         form_data = request.POST
         car = CarModel.objects.get(id=form_data.get('car'))
         payload = {
