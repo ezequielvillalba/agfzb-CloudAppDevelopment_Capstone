@@ -9,11 +9,17 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
-from .restapis import get_dealer_reviews_from_cf
 from .restapis import get_dealers_from_cf
 from .restapis import post_request
+from .restapis import get_request
+from .restapis import get_dealer_by_id_from_cf
+from .restapis import get_dealer_by_state_from_cf
+from .restapis import get_dealer_reviews_from_cf
 from .restapis import analyze_review_sentiments
 from .models import CarModel
+from .models import CarMake
+from .models import CarDealer
+from .models import DealerReview
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
