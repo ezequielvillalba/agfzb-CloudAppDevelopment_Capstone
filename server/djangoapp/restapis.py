@@ -127,20 +127,21 @@ def get_dealer_by_state_from_cf(url, state):
     return results
 
 # Create a get_dealer_reviews_from_cf method to get reviews by dealer id from a cloud function
-def get_dealer_reviews_from_cf(url, dealerId):
+def get_dealer_reviews_from_cf(url, **kwargs):
     results = []
-    # Call get_request with a URL parameter
-    json_result = get_request(url, dealerId=dealerId)
+    id = kwargs.get("id")
+    if id:
+        json_result = get_request(url, id=id)
+    else:
+        json_result = get_request(url)
+    # print(json_result)
     if json_result:
         reviews = json_result["data"]["docs"]
-        for review in reviews:
-            dealer_review = review
+        for dealer_review in reviews:
             review_obj = DealerReview(dealership=dealer_review["dealership"],
-                                      name=dealer_review["name"],
-                                      purchase=dealer_review["purchase"],
-                                      review=dealer_review["review"]
-                                      
-                                      )
+                                   name=dealer_review["name"],
+                                   purchase=dealer_review["purchase"],
+                                   review=dealer_review["review"])
             if "id" in dealer_review:
                 review_obj.id = dealer_review["id"]
             if "purchase_date" in dealer_review:
@@ -152,7 +153,8 @@ def get_dealer_reviews_from_cf(url, dealerId):
             if "car_year" in dealer_review:
                 review_obj.car_year = dealer_review["car_year"]
 
-            sentiment = analyze_review_sentiments(dealer_review["sentiment"])
+            sentiment = analyze_review_sentiments(review_obj.review)
+            print(sentiment)
             review_obj.sentiment = sentiment
             results.append(review_obj)
 
