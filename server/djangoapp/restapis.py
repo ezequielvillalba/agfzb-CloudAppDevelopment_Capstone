@@ -1,7 +1,7 @@
 import requests
 import json
 # import related models here
-from .models import CarDealer, DealerReview
+from .models import CarDealer, DealerReview, CarModel, CarMake
 from requests.auth import HTTPBasicAuth
 import json
 from ibm_watson import NaturalLanguageUnderstandingV1
