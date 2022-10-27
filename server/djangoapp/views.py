@@ -120,34 +120,41 @@ def get_dealer_details(request, id):
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
 # # ...
-def add_review(request, dealerId):
-    context = {
-        "dealerId": dealerId
-    }
-    get_url = url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
-    car_dealer = get_dealers_from_cf(get_url, dealerId=dealerId)
-    if request.method == 'POST':
-        post_url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/post-review"
-        form_data = request.POST
-        car = CarModel.objects.get(id=form_data.get('car'))
-        payload = {
-            "review": {
-                'id': 2022,
-                'review': form_data.get('review_text'),
-                'car_make': car.car_make.name,
-                'car_year': int(car.year.strftime("%Y")),
-                'car_model': car.name,
-                'purchase': True if form_data.get('purchase') == 'on' else False,
-                'purchase_date': form_data.get('purchase_date'),
-                'name': form_data.get('name'),
-                'dealership': dealerId,
-                'sentiment': analyze_review_sentiments( "nautral" if form_data.get('review_text') == "" else "positive" if form_data.get('purchase') == 'on' else "negative" )
-            }
-        }
-        response = post_request(post_url, payload)
-        print("With url {}, \nresponse => {}".format(post_url, response))
-        return redirect('djangoapp:dealer_details', dealerId=dealerId, dealerFullName=car_dealer[0].full_name)
-    elif request.method == 'GET':
-        context['cars'] = CarModel.objects.all()
-        context['dealership'] = car_dealer[0]
+def add_review(request, id):
+    context = {}
+    dealer_url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/rauschme_dealership/dealership-package/get-dealership"
+    dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
+    context["dealer"] = dealer
+    if request.method == 'GET':
+        # Get cars for the dealer
+        cars = CarModel.objects.all()
+        print(cars)
+        context["cars"] = cars
+
         return render(request, 'djangoapp/add_review.html', context)
+    elif request.method == 'POST':
+        if request.user.is_authenticated:
+            username = request.user.username
+            print(request.POST)
+            payload = dict()
+            car_id = request.POST["car"]
+            car = CarModel.objects.get(pk=car_id)
+            payload["time"] = datetime.utcnow().isoformat()
+            payload["name"] = username
+            payload["dealership"] = id
+            payload["id"] = id
+            payload["review"] = request.POST["content"]
+            payload["purchase"] = False
+            if "purchasecheck" in request.POST:
+                if request.POST["purchasecheck"] == 'on':
+                    payload["purchase"] = True
+            payload["purchase_date"] = request.POST["purchasedate"]
+            payload["car_make"] = car.make.name
+            payload["car_model"] = car.name
+            payload["car_year"] = int(car.year.strftime("%Y"))
+
+            new_payload = {}
+            new_payload["review"] = payload
+            review_post_url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/rauschme_dealership/dealership-package/post-review"
+            post_request(review_post_url, new_payload, id=id)
+        return redirect("djangoapp:dealer_details", id=id)
