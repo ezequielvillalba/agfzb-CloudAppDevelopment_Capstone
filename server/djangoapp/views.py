@@ -12,8 +12,8 @@ from datetime import datetime
 from .restapis import get_dealers_from_cf
 from .restapis import post_request
 from .restapis import get_request
-from .restapis import get_dealer_by_id
-from .restapis import get_dealer_by_state
+from .restapis import get_dealer_by_id_from_cf
+from .restapis import get_dealer_by_state_from_cf
 from .restapis import get_dealer_reviews_from_cf
 from .restapis import analyze_review_sentiments
 from .models import CarModel
@@ -99,72 +99,13 @@ def registration_request(request):
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
     if request.method == "GET":
+        context = {}
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
-        # Get dealers from the URL
-        dealer_list = get_dealers_from_cf(url)
-        context={}
-        dealers_temp=[]
-        for dealer in dealer_list:
-            dealers_temp.append([{"city":dealer.city},
-                     {"st":dealer.st},
-                     {"full_name":dealer.full_name},
-                     {"id": dealer.id},
-                     {"address":dealer.address},
-                     {"zip":dealer.zip},
-                     {"st":dealer.st}])
-        context['dealers']=dealers_temp   
-        return render(request, 'djangoapp/index.html', {'dealers':context['dealers']})
+        dealerships = get_dealers_from_cf(url)
+        context["dealership_list"] = dealerships
+        return render(request, 'djangoapp/index.html', context)
     
-    
-def get_dealerships_by_state(request, st):
-    if request.method == "GET":
-        url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
-        # Get dealers from the URL
-        dealerships = get_dealers_by_state(url,st)
-        # Concat all dealer's short name
-        context={}
-        dealers_temp=[]
-        for dealer in dealerships:
-            print(dealer.city)
-            dealers_temp.append([{"city":dealer.city},
-                     {"state":dealer.state},
-                     {"full_name":dealer.full_name},
-                     {"id": dealer.id}])
-        context['dealers']=dealers_temp  
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
-        # Return a list of dealer short name
-        #return HttpResponse(dealer_names)
-        return render(request, 'djangoapp/index.html', {'dealers':context['dealers']})
 
-def get_dealerships_by_state_abbr(request):
-    if request.method == "POST":
-        state=request.POST['state'].upper()
-        st={}
-        # A dict is being passed 
-        st['st']=state
-        url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
-        # Get dealers from the URL
-        dealerships = get_dealers_by_state(url,st)
-        # Concat all dealer's short name
-        context={}
-        dealers_temp=[]
-        for dealer in dealerships:
-            dealers_temp.append([{"city":dealer.city},
-                     {"state":dealer.state},
-                     {"full_name":dealer.full_name},
-                     {"id": dealer.id}])
-        context['dealers']=dealers_temp  
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
-        # Return a list of dealer short name
-        #return HttpResponse(dealer_names)
-        return render(request, 'djangoapp/index.html', {'dealers':context['dealers']})    
-
-def get_dealerships_by_id(request, dealerId):
-    if request.method == "GET":
-        url="https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
-        # url = "https://6c1cc8db.us-south.apigw.appdomain.cloud/api/dealership"    
-        dealer_details = get_dealer_by_id(url, dealerId)
-        return HttpResponse(dealer_details)
 # Create a `get_dealer_details` view to render the reviews of a dealer
     
 # def get_dealer_details(request, id):
