@@ -167,13 +167,17 @@ def get_dealer_reviews_from_cf(url, **kwargs):
 
 
 
-def analyze_review_sentiments(text):
-    url = "https://322d2895-8806-458a-992a-18f2fb8cd10a-bluemix.cloudantnosqldb.appdomain.cloud"
-    api_key = "Tis_kkoet1gdM43W9j8hFT6IUe22ymwtFCx3LJFVy4Cw"
-    authenticator = IAMAuthenticator(api_key)
-    natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator)
-    natural_language_understanding.set_service_url(url)
-    response = natural_language_understanding.analyze( text=text+"hello hello hello",features=Features(sentiment=SentimentOptions(targets=[text+"hello hello hello"]))).get_result()
-    label=json.dumps(response, indent=2)
-    label = response['sentiment']['document']['label']
-    return(label)
+def analyze_review_sentiments(dealerReview, language="en"):
+    try:
+        url = "https://322d2895-8806-458a-992a-18f2fb8cd10a-bluemix.cloudantnosqldb.appdomain.cloud"
+        api_key = "Tis_kkoet1gdM43W9j8hFT6IUe22ymwtFCx3LJFVy4Cw"
+        authenticator = IAMAuthenticator(api_key)
+        natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator)
+        natural_language_understanding.set_service_url(url)
+        response = natural_language_understanding.analyze( text=text+"hello hello hello",features=Features(sentiment=SentimentOptions(targets=[text+"hello hello hello"]))).get_result()
+        label=json.dumps(response, indent=2)
+        label = response['sentiment']['document']['label']
+        return(label)
+    except(requests.exceptions.RequestException, ConnectionResetError) as err:
+        print("connection error")
+        return {"error": err}
