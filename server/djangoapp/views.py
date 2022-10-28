@@ -91,8 +91,8 @@ def registration_request(request):
 def get_dealerships(request):
     if request.method == "GET":
         context = {}
-        #url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
-        url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/rauschme_dealership/dealership-package/get-dealership"
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
+        #url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/rauschme_dealership/dealership-package/get-dealership"
         dealerships = get_dealers_from_cf(url)
         context["dealership_list"] = dealerships
         return render(request, 'djangoapp/index.html', context)
@@ -103,13 +103,13 @@ def get_dealerships(request):
 def get_dealer_details(request, id):
     if request.method == "GET":
         context = {}
-        #dealer_url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
-        dealer_url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/rauschme_dealership/dealership-package/get-dealership"
+        dealer_url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
+        #dealer_url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/rauschme_dealership/dealership-package/get-dealership"
         dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
         context["dealer"] = dealer
 
-        #review_url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-review"
-        review_url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/rauschme_dealership/dealership-package/get-review"
+        review_url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-review"
+        #review_url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/rauschme_dealership/dealership-package/get-review"
         reviews = get_dealer_reviews_from_cf(review_url, id=id)
         print(reviews)
         context["reviews"] = reviews
@@ -122,8 +122,8 @@ def get_dealer_details(request, id):
 # # ...
 def add_review(request, id):
     context = {}
-    #dealer_url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
-    dealer_url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/rauschme_dealership/dealership-package/get-dealership"
+    dealer_url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/get-dealership"
+    #dealer_url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/rauschme_dealership/dealership-package/get-dealership"
     dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
     context["dealer"] = dealer
     if request.method == 'GET':
@@ -156,7 +156,7 @@ def add_review(request, id):
 
             new_payload = {}
             new_payload["review"] = payload
-            #review_post_url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/post-review"
-            review_post_url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/rauschme_dealership/dealership-package/post-review"
+            review_post_url = "https://us-south.functions.appdomain.cloud/api/v1/web/5ed85b03-2491-4385-a14a-5c8fb7f7c154/dealership-package/post-review"
+            #review_post_url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/rauschme_dealership/dealership-package/post-review"
             post_request(review_post_url, new_payload, id=id)
         return redirect("djangoapp:dealer_details", id=id)
