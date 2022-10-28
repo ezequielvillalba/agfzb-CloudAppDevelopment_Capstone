@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>About Us</title>
+    <title>Best Car Dealership</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -13,20 +13,20 @@
 
 </head>
 
-     <body>
+    <body>
     <!--Add a nav bar here -->
-    <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Best Car Dealership</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Best Car Dealership</a></li>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link" href="{% url 'djangoapp:about' %}">About Us</a>
+            <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact</a>
             </div>
-            <ul class="nav navbar-nav navbar-left">    
-                  <li>
-                      <a class="btn btn-link" href="{% url 'djangoapp:about' %}">About Us</a>
-                      <a class="btn btn-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
-                  </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
+        </div>
+        <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
             <li>
                 <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
@@ -38,15 +38,14 @@
                     {% csrf_token %}
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Username" name="username" >
-                        <input type="password" class="form-control" placeholder="Password" name="psw" >
+                        <input type="password" class="form-control" placeholder="password" name="psw" >
                         <button class="btn btn-primary" type="submit">Login</button>
                         <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
                     </div>
                 </form>
             </li>
             {% endif %}
-            </ul>
-        </div>
+        </ul>
     </nav>
          
     <section class="bg-light mb-3">
